@@ -1,0 +1,63 @@
+---
+title: "GROUP WORK PROJECT"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+# Packages required
+```{r message=FALSE, warning=FALSE, include=TRUE}
+library(tidyverse)
+library(qcc)
+```
+
+## DATASET DESCRIPTION
+-The following data set is about National indices  from United States collected over a period of seven years .National indices represent the performance of stock market of a country and reflects the sentiment of investors on the state of the economy.Our data set is made up of two variables Year ;samples randomly picked over different months for the seven years the other variable is Nat_indices containing the values of the indices .
+
+
+```{r message=FALSE}
+#Importing data
+measurement<-read_csv("National_Indices.csv")
+head(measurement,n=10)
+
+```
+
+
+
+
+# Xbar chart
+```{r paged.print=FALSE}
+attach(measurement)
+
+#grouping the variables
+Grouped_data<-qcc.groups(Nat_indices,Year)
+Xbar<-qcc(Grouped_data,type = "xbar")
+```
+
+## Interpretation
+The process has 7 groups with a standard deviation=5.26, CL=100.83,and the upper and lower limit 107.88 & 93.76 respectively .We conclude the Indices are not in control since the some values lie outside of the outer control limit. The pattern identified is the shift in process.This can be explained with the drop in dollar value after the economic crisis in some of the years causing inflation
+
+# R chart
+```{r}
+Rchart<-qcc(Grouped_data,type = "R")
+
+```
+
+## Interpretation
+R charts gives us the information about the variation(Range) of the values.
+The pattern identified is the freak pattern from the wild patterns they are mostly caused by external factors which can include Natural and human resources.The process is not in control since some value lie outside of the control limit
+
+# C charts
+```{r}
+Newdata<-measurement %>% select(-Year) %>% mutate(sample=rep(35,35))
+C_chart<-qcc(Newdata[1:10,],type = "c",newdata = Newdata[11:35,])
+
+```
+
+
+## Interpretation
+I decided to split  the data set into two so as to check the no.conformities for the two groups.These type of charts count the actual number of defects since we can not compute the proportion of defective on the national indices.The plot exhibits special cases variation hence we conclude the process is not in control
+
+# Recommendations
+The first method for stabilizing national indices is to diversify the country’s economy.This can be achieved by promoting new industries, encouraging small businesses, and encouraging foreign investments. Secondly is to maintain a healthy and well-regulated banking system,this ensure that credit is available when needed. Governments can also provide incentives for banks to lend money to small businesses, which will help to stimulate economic activity. Furthermore by maintaining   a strong financial system it will ensure that the economy remains healthy
+
